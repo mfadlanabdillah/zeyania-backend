@@ -22,6 +22,11 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin'
         ]);
 
+        User::factory()->create([
+            'name'  => 'Customer Zeyania',
+            'email' => 'customer@zeyania.test',
+        ]);
+
         $listings = Listing::factory(10)->create();
     }
 }
