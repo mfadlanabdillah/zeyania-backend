@@ -14,6 +14,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\FileUpload;
+use Filament\Support\Enums\FontWeight;
 
 class ListingResource extends Resource
 {
@@ -54,19 +56,19 @@ class ListingResource extends Resource
                     ->numeric()
                     ->default(0),
                 Forms\Components\Checkbox::make('full_support_available')
-                    ->required()
                     ->default(0),
                 Forms\Components\Checkbox::make('gym_area_available')
-                    ->required()
                     ->default(0),
                 Forms\Components\Checkbox::make('mini_cafe_available')
-                    ->required()
                     ->default(0),
                 Forms\Components\Checkbox::make('cinema_available')
-                    ->required()
                     ->default(0),
-                Forms\Components\Textarea::make('attachments')
-                    ->columnSpanFull(),
+                FileUpload::make('attachments')
+                    ->directory('listings')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->appendFiles()
             ]);
     }
 
@@ -75,34 +77,24 @@ class ListingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('address')
+                    ->weight(FontWeight::Bold)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sqft')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('wifi_speed')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('max_person')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('price_per_day')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('full_support_available')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('gym_area_available')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('mini_cafe_available')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('cinema_available')
-                    ->numeric()
+                    ->money('USD')
+                    ->weight(FontWeight::Bold)
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -112,16 +104,16 @@ class ListingResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
