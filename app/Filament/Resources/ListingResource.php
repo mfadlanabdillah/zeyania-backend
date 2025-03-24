@@ -80,27 +80,33 @@ class ListingResource extends Resource
                     ->weight(FontWeight::Bold)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('sqft')
+                    ->label('Sqft')
                     ->numeric()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('wifi_speed')
+                    ->label('Wifi Speed')
                     ->numeric()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('max_person')
+                    ->label('Max Person')
                     ->numeric()
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('price_per_day')
+                    ->label('Price Per Day')
                     ->money('USD')
                     ->weight(FontWeight::Bold)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Updated At')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
